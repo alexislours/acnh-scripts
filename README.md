@@ -1,0 +1,1 @@
+Scripts I use to work on ACNH, might publish more down the line. Additional info can be found in each folder.

@@ -1,0 +1,1 @@
+Cleans the latin strings and merges them into a single CSV file. Not perfect but does the job.

@@ -1,0 +1,1 @@
+Script made by shummy, export cleaned Russian strings as they use a different system for declensions.
