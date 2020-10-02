@@ -14,8 +14,7 @@ blacklist = [
 ]
 
 currentDir = os.getcwd()
-outputDir = currentDir + "/script_output/"
-print(os.getcwd())
+outputDir = os.path.join(currentDir, "script_output")
 
 translationPrefix = r"&#xE;[2\(\)](\\0|[%'])&#x4;(&#x[1-5];|\\0)?[촀촁](\\0)?"
 # prefix1 = r"&#xE;2\\0&#x4;&#x[12];촀"
@@ -81,19 +80,23 @@ def clearOldFiles():
     os.mkdir(outputDir)
 
 def scanDir():
-    with os.scandir() as it:
-        for entry in it:
-            fileName, fileExtension = os.path.splitext(entry.name)
-            if fileExtension == '.csv' and fileName not in blacklist:
-                with open(entry) as sourceFile, open(outputDir + entry.name, 'w') as outputFile:
-                    for line in sourceFile.readlines():
-                        normalizedStr = normalize(line)
-                        outputFile.write(normalizedStr + "\n")
-                        # if '#' in normalizedStr:
-                        #     print(f"String parsing failed in {fileName}:\n{line}")
+    for entry in os.scandir():
+        fileName, fileExtension = os.path.splitext(entry.name)
+        if fileExtension != '.csv' or fileName in blacklist:
+            continue
+        
+        outputPath = os.path.join(outputDir, entry.name)
+        with open(entry) as sourceFile, open(outputPath, 'w') as outputFile:
+            for normalizedStr in map(normalize, sourceFile):
+                outputFile.write(normalizedStr + "\n")
+                # if '#' in normalizedStr:
+                #     print(f"String parsing failed in {fileName}:\n{line}")
 
-if len(sys.argv) > 1:
-    print(normalize(sys.argv[1]))
-else:
-    clearOldFiles()
-    scanDir()
+                        
+if __name__ == '__main__':
+    print(currentDir)
+    if len(sys.argv) > 1:
+        print(normalize(sys.argv[1]))
+    else:
+        clearOldFiles()
+        scanDir()
